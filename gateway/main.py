@@ -4,6 +4,11 @@ from fastapi.responses import FileResponse
 import requests
 from reportlab.platypus import SimpleDocTemplate, Paragraph, ListItem, ListFlowable
 from reportlab.lib.styles import getSampleStyleSheet
+from fastapi import Query
+from fastapi import Body
+from reportlab.platypus import Image, Spacer
+import base64
+from io import BytesIO
 
 app = FastAPI()
 app.add_middleware(
@@ -48,34 +53,41 @@ def obtener_datos_sap():
         return {"error": str(e)}
 
 
-@app.get("/generar-pdf")
-def generar_pdf():
-    headers = {
-        "APIKey": API_KEY,
-        "Accept": "application/json"
-    }
+@app.post("/generar-pdf")
+def generar_pdf(data: dict = Body(...)):
 
-    try:
-        response = requests.get(SAP_API_URL, headers=headers, timeout=10)
-        data = response.json()
-        partners = data["d"]["results"]
+    proveedor = data.get("proveedor", "XXX")
+    factura = data.get("factura", "XXX")
+    precio = data.get("precio", "XXX")
+    imagen_base64 = data.get("imagen")
 
-        file_path = "partners.pdf"
-        doc = SimpleDocTemplate(file_path)
-        styles = getSampleStyleSheet()
-        elements = []
+    file_path = "reporte.pdf"
+    doc = SimpleDocTemplate(file_path)
+    styles = getSampleStyleSheet()
+    elements = []
 
-        elements.append(Paragraph("Lista de Business Partners", styles["Title"]))
+    elements.append(Paragraph(
+        "Punto 6: Crédito fiscal por operaciones que no cumplen con el Principio de Causalidad (S/ 371,073.00)",
+        styles["Title"]
+    ))
 
-        lista = []
-        for p in partners:
-            texto = f'{p["BusinessPartner"]} - {p["BusinessPartnerFullName"]}'
-            lista.append(ListItem(Paragraph(texto, styles["Normal"])))
+    texto = f"""
+    SUNAT desconoce el crédito fiscal relacionado al IGV efectivamente cancelado por nuestra empresa por concepto de las regalías pagadas a nuestro proveedor <font color="red">{proveedor}</font>,
+    empresa domiciliada en Chile, mediante las facturas Nos. <font color="red">{factura}</font>.
 
-        elements.append(ListFlowable(lista))
-        doc.build(elements)
+    Precios <font color="red">{precio}</font>
+    """
 
-        return FileResponse(file_path, media_type="application/pdf", filename="partners.pdf")
+    elements.append(Paragraph(texto, styles["Normal"]))
+    elements.append(Spacer(1, 20))
 
-    except Exception as e:
-        return {"error": str(e)}
+    # Insertar imagen si existe
+    if imagen_base64:
+        header, encoded = imagen_base64.split(",", 1)
+        imgdata = base64.b64decode(encoded)
+        image = Image(BytesIO(imgdata), width=300, height=200)
+        elements.append(image)
+
+    doc.build(elements)
+
+    return FileResponse(file_path, media_type="application/pdf", filename="reporte.pdf")
