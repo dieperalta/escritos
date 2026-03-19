@@ -1,85 +1,102 @@
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f6f8;
   margin: 0;
-  padding: 0;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f6f8;
 }
 
 .container {
-  max-width: 800px;
-  margin: 40px auto;
-  background: white;
+  max-width: 1200px;
+  margin: auto;
   padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.08);
 }
 
 .titulo {
   text-align: center;
-  color: #0d3b66;
-  margin-bottom: 30px;
+  color: #1e3a5f;
+  margin-bottom: 20px;
 }
 
-.seccion {
-  margin-bottom: 25px;
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+  transition: all 0.3s ease;
 }
 
-label {
-  font-weight: bold;
-  display: block;
-  margin-bottom: 6px;
+.card:hover {
+  transform: translateY(-2px);
 }
 
-input[type="text"],
-input[type="number"],
-input[type="file"] {
-  width: 100%;
-  padding: 8px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  margin-bottom: 10px;
+.botones {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
 button {
   padding: 10px 18px;
-  border-radius: 6px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
   font-weight: bold;
-  margin-right: 10px;
-  transition: 0.2s ease-in-out;
+  transition: all 0.2s ease;
 }
 
 .btn-primario {
-  background-color: #0d6efd;
+  background-color: #1e3a5f;
   color: white;
 }
 
 .btn-primario:hover {
-  background-color: #0b5ed7;
-}
-
-.btn-secundario {
-  background-color: #6c757d;
-  color: white;
-}
-
-.btn-secundario:hover {
-  background-color: #5c636a;
+  background-color: #16324a;
 }
 
 .btn-exito {
-  background-color: #198754;
+  background-color: #2e7d32;
   color: white;
 }
 
 .btn-exito:hover {
-  background-color: #157347;
+  background-color: #1b5e20;
 }
 
-.preview-img {
-  margin-top: 15px;
-  max-width: 100%;
-  border-radius: 8px;
-  border: 1px solid #ddd;
+input {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+label {
+  font-weight: bold;
+}
+
+.texto-principal {
+  line-height: 1.7;
+  color: #333;
+}
+
+.highlight {
+  color: #c62828;
+  font-weight: bold;
+}
+
+.historial {
+  border-left: 3px solid #1e3a5f;
+  padding-left: 20px;
+}
+
+.historial-item {
+  background: #f9f9f9;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.loading {
+  text-align: center;
+  color: #1e3a5f;
+  font-weight: bold;
 }

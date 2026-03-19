@@ -83,11 +83,15 @@ def generar_pdf(data: dict = Body(...)):
 
     # Insertar imagen si existe
     if imagen_base64:
-        header, encoded = imagen_base64.split(",", 1)
-        imgdata = base64.b64decode(encoded)
-        image = Image(BytesIO(imgdata), width=300, height=200)
-        elements.append(image)
+        try:
+            if "," in imagen_base64:
+                encoded = imagen_base64.split(",", 1)[1]
+            else:
+                encoded = imagen_base64
 
-    doc.build(elements)
+            imgdata = base64.b64decode(encoded)
+            image = Image(BytesIO(imgdata), width=300, height=200)
+            elements.append(image)
 
-    return FileResponse(file_path, media_type="application/pdf", filename="reporte.pdf")
+        except Exception as e:
+            print("Error procesando imagen:", e)
